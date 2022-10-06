@@ -28,7 +28,7 @@ jobs:
           rm -rf ./*
           cp -rf ../build/* ./
           git add .
-          commit -m "${{ github.actor }} deploy"
+          git commit -m "${{ github.actor }} deploy"
           git push origin gh-pages
           cd ..
     
