@@ -1,0 +1,32 @@
+name: deploy-gh-pages-actions
+run-name: ${{ github.action }} is deploying
+on:
+  push:
+    branchs: main
+jobs:
+  deploy-gh-pages:
+    run-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          token: ${{ github.token }}
+      - uses: actions/setup-node@v3
+        with:
+          node-version: "16"
+      - run: |
+          git config --global user.email "${{ github.event.pusher.email }}"
+          git config --global user.name "${{ github.actor }}" 
+      - run: mkdir -p ./gh-pages
+      - run: git init -b gh-pages ./gh-pages
+      - run: cd ./gh-pages
+      - run: |
+          git remote add -t gh-pages origin \ 
+          https://git:${{ github.token }}@github.com/${{ github.repository }}.git
+      - run: git pull origin gh-pages
+      - run: rm -rf ./*
+      - run: cp -rf ../build/* ./
+      - run: git add .
+      - run: commit -m "${{ github.actor }} deploy"
+      - run: git push origin gh-pages
+      - run: cd ..
+    
