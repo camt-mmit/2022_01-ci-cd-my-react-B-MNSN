@@ -1,5 +1,5 @@
 name: deploy-gh-pages-actions
-run-name: ${{ github.action }} is deploying
+run-name: ${{ github.actor }} is deploying
 on:
   push:
     branchs: main
@@ -24,11 +24,9 @@ jobs:
           cd ./gh-pages
           git remote add -t gh-pages origin \
           https://git:${{ github.token }}@github.com/${{ github.repository }}.git
-          git pull origin gh-pages
-          rm -rf ./*
-          cp -rf ../build/* ./
+          git fetch -u origin gh-pages:gh-pages || exit 0
           git add .
-          git commit -m "Manually commit"
+          git commit -m "Manually commit" || exit 0
           git push origin gh-pages
           cd ..
     
