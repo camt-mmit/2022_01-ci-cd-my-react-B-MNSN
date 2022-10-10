@@ -1,0 +1,24 @@
+name: feature-01 CI
+run-name: ${{ github.actor }} is integrating feature-01
+on:
+  push:
+    branch:
+      -feature-01
+jobs:
+  ci-feature-01:
+    runs-on: ubuntu-latest
+    steps: 
+      - uses: actions/checkout@v3
+        with:
+          token: ${{ github.token }}
+      - uses: actions/setup-node@v3
+        with:
+          node-version: "16"
+      - name: Setup git user
+        run: |
+          git config --global user.email "${{ github.event.pusher.email }}"
+          git config --global user.name "${{ github.actor }}"
+      - name: Install dependencies
+        run: npm ci
+      - name: Test project
+        run: npm run test:ci
