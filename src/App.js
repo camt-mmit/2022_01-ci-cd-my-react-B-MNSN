@@ -1,7 +1,20 @@
 import logo from './logo.svg';
 import './App.css';
+import { useEffect, useState } from 'react';
+import axios from 'axios';
 
 function App() {
+  const [data, setData] = useState([]);
+
+  useEffect(() => {
+    const getData = async () => {
+      const res = await axios('http://localhost:8081/data')
+      console.log(res);
+      setData(res.data.data);
+    }
+    getData();
+  }, []);
+
   return (
     <div className="App">
       <header className="App-header">
@@ -15,8 +28,9 @@ function App() {
           target="_blank"
           rel="noopener noreferrer"
         >
-          Learn React Test feature-01 BEER
+          Learn React Test Docker Hub Push
         </a>
+        <h4>{data && `${data.join(' , ')}`}</h4>
       </header>
     </div>
   );
